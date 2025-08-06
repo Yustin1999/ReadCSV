@@ -54,11 +54,15 @@ using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             }
                
         }
-        string emailBody = string.Join("<br/>", messages);
+        messages.Add($@"
+                    <p>This email only flags the sites that have a % Entry-Exit difference of 8% or higher</p>
+                        ");
+        string emailBody = string.Join(" <br/>", messages);
         if (messages.Count == 0)
         {
             emailBody = "No issues found for today.";
         }
+            
             Emailer.SendEmail(emailBody,path);
     }
 
