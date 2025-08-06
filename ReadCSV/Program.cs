@@ -7,7 +7,7 @@ string path = "C:\\Users\\Justi\\Downloads\\TEST.CSV";
 using (var reader = new StreamReader("C:\\Users\\Justi\\Downloads\\TEST.CSV"))
 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
 {
-    string sendMessage = "";
+    
     using (var dr = new CsvDataReader(csv)) {
         var dt = new DataTable();
         dt.Columns.Add("Area", typeof(string));
