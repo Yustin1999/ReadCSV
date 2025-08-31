@@ -7,7 +7,7 @@ string path = "C:\\Users\\Justi\\Downloads\\TEST.CSV";
 using (var reader = new StreamReader("C:\\Users\\Justi\\Downloads\\TEST.CSV"))
 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
 {
-    
+     
     using (var dr = new CsvDataReader(csv)) {
         var dt = new DataTable();
         dt.Columns.Add("Area", typeof(string));
@@ -24,31 +24,32 @@ using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             string area = dt.Rows[i]["area"].ToString();
             int entered = Convert.ToInt32(dt.Rows[i]["All Entered"]);
             int exited = Convert.ToInt32(dt.Rows[i]["All Exited"]);
-            
+            // Only care about the sites that have 8% or greater disparity
+            // Only take a few of the details from the query can add any of the other columns to the email
             if (percent >= 8.00) {
                 values.Add(area, [percent, entered, exited]);
             }
         }
-        foreach (var pair in values){
-            if (pair.Value[1] > pair.Value[2]){
+        foreach (var value in values){
+            if (value.Value[1] > value.Value[2]){
                 //messages.Add($"Area: {pair.Key}, Entry-Exit % difference: {pair.Value[0]}% , Total vehicles entered: {pair.Value[1]} , Total vehicles Exited: {pair.Value[2]}  - Please check the Exit cameras for this site");
                 messages.Add($@"
-                    <b>Area: {pair.Key}</b>
+                    <b>Area: {value.Key}</b>
                     <ul>
-                        <li>Entry-Exit % difference: {pair.Value[0]}%</li>
-                        <li>Total vehicles entered: {pair.Value[1]}</li>
-                        <li>Total vehicles exited: {pair.Value[2]}</li>
+                        <li>Entry-Exit % difference: {value.Value[0]}%</li>
+                        <li>Total vehicles entered: {value.Value[1]}</li>
+                        <li>Total vehicles exited: {value.Value[2]}</li>
                         <li>Please check the Entry cameras for this site</li>
                     </ul>");
             }
             else {
                 //messages.Add($"Area: {pair.Key}, Entry-Exit % difference: {pair.Value[0]}% , Total vehicles entered: {pair.Value[1]} , Total vehicles Exited: {pair.Value[2]}  - Please check the Entry cameras for this site");
                 messages.Add($@"
-                    <b>Area: {pair.Key}</b>
+                    <b>Area: {value.Key}</b>
                     <ul>
-                        <li>Entry-Exit % difference: {pair.Value[0]}%</li>
-                        <li>Total vehicles entered: {pair.Value[1]}</li>
-                        <li>Total vehicles exited: {pair.Value[2]}</li>
+                        <li>Entry-Exit % difference: {value.Value[0]}%</li>
+                        <li>Total vehicles entered: {value.Value[1]}</li>
+                        <li>Total vehicles exited: {value.Value[2]}</li>
                         <li>Please check the Exit cameras for this site</li>
                     </ul>");
             }
